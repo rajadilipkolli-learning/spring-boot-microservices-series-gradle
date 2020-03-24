@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.example.catalogservice.utils.Constants.PROFILE_TEST;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.hasSize;
@@ -33,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = ProductController.class)
-@ActiveProfiles("test")
+@ActiveProfiles({ PROFILE_TEST })
 class ProductControllerTest {
 
   @Autowired
@@ -67,13 +68,13 @@ class ProductControllerTest {
   }
 
   @Test
-  void shouldFindProductById() throws Exception {
-    Long productId = 1L;
-    Product product = new Product(productId, "P001", "Product 1", null, 25);
-    given(productService.findProductById(productId)).willReturn(Optional.of(product));
+  void shouldFindProductByCode() throws Exception {
+    String productCode = "P001";
+    Product product = new Product(1L, "P001", "Product 1", null, 25);
+    given(productService.findProductByCode(productCode)).willReturn(Optional.of(product));
 
-    this.mockMvc.perform(get("/api/products/{id}", productId)).andExpect(status().isOk())
-        .andExpect(jsonPath("$.code", is(product.getCode())));
+    this.mockMvc.perform(get("/api/products/{code}", productCode))
+        .andExpect(status().isOk()).andExpect(jsonPath("$.code", is(product.getCode())));
   }
 
   @Test
@@ -92,21 +93,19 @@ class ProductControllerTest {
         .willAnswer((invocation) -> invocation.getArgument(0));
 
     Product product = new Product(1L, "P001", "Product 1", null, 25);
-    this.mockMvc.perform(
-        post("/api/products").contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(product)))
+    this.mockMvc.perform(post("/api/products").contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(product)))
         .andExpect(status().isCreated()).andExpect(jsonPath("$.id", notNullValue()))
         .andExpect(jsonPath("$.code", is(product.getCode())));
 
   }
 
   @Test
-  void shouldReturn400WhenCreateNewProductWithoutText() throws Exception {
+  void shouldReturn400WhenCreateNewProductWithoutCode() throws Exception {
     Product product = new Product(null, null, null, null, 0);
 
-    this.mockMvc.perform(
-        post("/api/products").contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(product)))
+    this.mockMvc.perform(post("/api/products").contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(product)))
         .andExpect(status().isBadRequest())
         .andExpect(header().string("Content-Type", is("application/problem+json")))
         .andExpect(jsonPath("$.type",
@@ -114,8 +113,8 @@ class ProductControllerTest {
         .andExpect(jsonPath("$.title", is("Constraint Violation")))
         .andExpect(jsonPath("$.status", is(400)))
         .andExpect(jsonPath("$.violations", hasSize(1)))
-        .andExpect(jsonPath("$.violations[0].field", is("text")))
-        .andExpect(jsonPath("$.violations[0].message", is("Text cannot be empty")))
+        .andExpect(jsonPath("$.violations[0].field", is("code")))
+        .andExpect(jsonPath("$.violations[0].message", is("Code cannot be empty")))
         .andReturn();
   }
 
@@ -127,9 +126,9 @@ class ProductControllerTest {
     given(productService.saveProduct(any(Product.class)))
         .willAnswer((invocation) -> invocation.getArgument(0));
 
-    this.mockMvc.perform(put("/api/products/{id}", product.getId())
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(objectMapper.writeValueAsString(product))).andExpect(status().isOk())
+    this.mockMvc.perform(
+        put("/api/products/{id}", product.getId()).contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(product))).andExpect(status().isOk())
         .andExpect(jsonPath("$.code", is(product.getCode())));
 
   }

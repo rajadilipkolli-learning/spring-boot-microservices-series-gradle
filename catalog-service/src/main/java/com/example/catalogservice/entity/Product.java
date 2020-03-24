@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "products")
@@ -25,6 +26,7 @@ public class Product {
   @GeneratedValue(generator = "product_id_generator")
   private Long id;
 
+  @NotBlank(message = "Code cannot be empty")
   @Column(nullable = false, unique = true)
   private String code;
 
