@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
+import java.util.Objects;
 
 @Entity
 @Table(name = "products")
@@ -36,4 +37,21 @@ public class Product {
   private String description;
 
   private double price;
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Product product = (Product) o;
+    return this.code.equals(product.getCode());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(this.code);
+  }
 }

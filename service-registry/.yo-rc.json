@@ -1,0 +1,19 @@
+{
+  "generator-springboot": {
+    "appType": "service-registry",
+    "appName": "service-registry",
+    "packageName": "com.example.serviceregistry",
+    "buildTool": "gradle",
+    "packageFolder": "com/example/serviceregistry",
+    "JAVA_VERSION": "1.8",
+    "SPRING_BOOT_VERSION": "2.2.4.RELEASE",
+    "SPRING_CLOUD_VERSION": "Hoxton.SR1",
+    "SPRING_DEP_MNGMNT_VERSION": "1.0.9.RELEASE",
+    "DEFAULT_APP_VERSION": "0.0.1-SNAPSHOT",
+    "PROBLEM_SPRING_WEB_VERSION": "0.25.2",
+    "SPRING_BOOT_TC_STARTER_VERSION": "1.36",
+    "SWAGGER_VERSION": "2.9.2",
+    "KEY_FLYWAY_MIGRATION_COUNTER": "FLYWAY_MIGRATION_COUNTER",
+    "KEY_LIQUIBASE_MIGRATION_COUNTER": "LIQUIBASE_MIGRATION_COUNTER"
+  }
+}
