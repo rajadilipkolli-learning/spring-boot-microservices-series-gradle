@@ -1,0 +1,19 @@
+pipeline {
+    agent any
+
+    triggers {
+            pollSCM('* * * * *')
+    }
+
+    environment {
+        APPLICATION_NAME = 'catalog-service'
+    }
+
+    stages {
+        stage('Build') {
+            steps {
+                sh './gradlew clean build'
+            }
+        }
+    }
+}
