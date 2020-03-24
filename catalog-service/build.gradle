@@ -5,6 +5,7 @@ plugins {
 }
 
 apply plugin: 'io.spring.dependency-management'
+apply from: 'cloud.gradle'
 
 group = 'com.example.catalogservice'
 version = '0.0.1-SNAPSHOT'
@@ -44,17 +45,12 @@ dependencies {
     runtimeOnly 'org.postgresql:postgresql'
     testImplementation "com.playtika.testcontainers:embedded-postgresql:${springbootTcStarterVersion}"
     implementation 'org.liquibase:liquibase-core'
-    implementation 'org.springframework.cloud:spring-cloud-starter-config'
-    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
-    implementation 'org.springframework.cloud:spring-cloud-starter-sleuth'
-    implementation 'org.springframework.cloud:spring-cloud-starter-zipkin'
     implementation "io.springfox:springfox-swagger2:${swaggerVersion}"
     implementation "io.springfox:springfox-swagger-ui:${swaggerVersion}"
 
     testImplementation ('org.springframework.boot:spring-boot-starter-test'){
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
-    testImplementation 'org.springframework.cloud:spring-cloud-starter'
     testImplementation 'org.junit.jupiter:junit-jupiter-api'
     testImplementation "org.junit.jupiter:junit-jupiter-params"
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'

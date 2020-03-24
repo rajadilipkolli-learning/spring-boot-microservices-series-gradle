@@ -28,9 +28,10 @@ class ProductControllerIT extends AbstractIntegrationTest {
         productRepository.deleteAll();
 
         productList = new ArrayList<>();
-        productList.add(new Product(1L, "First Product"));
-        productList.add(new Product(2L, "Second Product"));
-        productList.add(new Product(3L, "Third Product"));
+        this.productList.add(new Product(1L, "P001", "Product 1", null, 25));
+        this.productList.add(new Product(2L, "P002", "Product 2", null, 30));
+        this.productList.add(new Product(3L, "P003", "Product 3", null, 35));
+
         productList = productRepository.saveAll(productList);
     }
 
@@ -48,27 +49,27 @@ class ProductControllerIT extends AbstractIntegrationTest {
 
         this.mockMvc.perform(get("/api/products/{id}", productId))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.text", is(product.getText())))
+                .andExpect(jsonPath("$.code", is(product.getCode())))
         ;
     }
 
     @Test
     void shouldCreateNewProduct() throws Exception {
-        Product product = new Product(null, "New Product");
+        Product product = new Product(null, "P001", "Product 1", null, 25);
         this.mockMvc.perform(post("/api/products")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(product)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.text", is(product.getText())));
+                .andExpect(jsonPath("$.code", is(product.getCode())));
 
     }
 
     @Test
     void shouldReturn400WhenCreateNewProductWithoutText() throws Exception {
-        Product product = new Product(null, null);
+        Product product = new Product(null, null, null, null, 0);
 
         this.mockMvc.perform(post("/api/products")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(product)))
                 .andExpect(status().isBadRequest())
                 .andExpect(header().string("Content-Type", is("application/problem+json")))
@@ -85,13 +86,13 @@ class ProductControllerIT extends AbstractIntegrationTest {
     @Test
     void shouldUpdateProduct() throws Exception {
         Product product = productList.get(0);
-        product.setText("Updated Product");
+        product.setDescription("Updated Product");
 
         this.mockMvc.perform(put("/api/products/{id}", product.getId())
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(product)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.text", is(product.getText())));
+                .andExpect(jsonPath("$.description", is(product.getDescription())));
 
     }
 
@@ -102,7 +103,7 @@ class ProductControllerIT extends AbstractIntegrationTest {
         this.mockMvc.perform(
                 delete("/api/products/{id}", product.getId()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.text", is(product.getText())));
+                .andExpect(jsonPath("$.code", is(product.getCode())));
 
     }
 

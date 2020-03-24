@@ -28,6 +28,10 @@ public class ProductService {
         return productRepository.findById(id);
     }
 
+    public Optional<Product> findProductByCode(String code) {
+        return productRepository.findByCode(code);
+    }
+
     public Product saveProduct(Product product) {
         return productRepository.save(product);
     }
