@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ApplicationTests extends AbstractIntegrationTest {
+class CatalogServiceApplicationTests extends AbstractIntegrationTest {
 
   @Test
   void contextLoads() {
