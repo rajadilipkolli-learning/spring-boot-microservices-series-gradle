@@ -2,7 +2,8 @@ version: '3.8'
 services:
 
   postgresqldb:
-    image: postgres:12.3
+    image: postgres:latest
+    container_name: postgres-order-service
     environment:
       - POSTGRES_USER=siva
       - POSTGRES_PASSWORD=secret
