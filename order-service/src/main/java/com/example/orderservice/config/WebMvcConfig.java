@@ -1,4 +1,4 @@
-package com.example.catalogservice.config;
+package com.example.orderservice.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

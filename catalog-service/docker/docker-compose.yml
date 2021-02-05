@@ -13,7 +13,7 @@ services:
 
   postgresqldb:
     image: postgres:latest
-    container_name: postgresqldb
+    container_name: catalogservice_postgresqldb
     environment:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=secret
