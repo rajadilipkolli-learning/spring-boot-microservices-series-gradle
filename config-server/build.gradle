@@ -14,7 +14,7 @@ repositories {
 }
 
 ext {
-    set('springCloudVersion', "2020.0.0")
+    set('springCloudVersion', "2020.0.1")
 }
 
 dependencies {
