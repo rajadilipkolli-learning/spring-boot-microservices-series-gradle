@@ -5,6 +5,7 @@ import com.example.catalogservice.entity.Product;
 import com.example.catalogservice.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
@@ -21,18 +22,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@TestInstance(TestInstance.Lifecycle.PER_METHOD)
 class ProductControllerIT extends AbstractIntegrationTest {
 
   @Autowired
   private ProductRepository productRepository;
 
-  private List<Product> productList = null;
+  private List<Product> productList = new ArrayList<>();
 
   @BeforeEach
   void setUp() {
     this.productRepository.deleteAll();
 
-    productList = new ArrayList<>();
     this.productList.add(new Product(1L, "P001", "Product 1", null, 25));
     this.productList.add(new Product(2L, "P002", "Product 2", null, 30));
     this.productList.add(new Product(3L, "P003", "Product 3", null, 35));

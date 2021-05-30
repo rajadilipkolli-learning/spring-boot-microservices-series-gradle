@@ -3,7 +3,7 @@ package com.example.catalogservice.web.controller;
 import com.example.catalogservice.entity.Product;
 import com.example.catalogservice.service.ProductService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -48,7 +48,7 @@ class ProductControllerTest {
 
   private List<Product> productList;
 
-  @BeforeEach
+  @BeforeAll
   void setUp() {
     this.productList = new ArrayList<>();
     this.productList.add(new Product(1L, "P001", "Product 1", null, 25));

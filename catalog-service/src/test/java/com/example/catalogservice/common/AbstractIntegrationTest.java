@@ -11,19 +11,15 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
-@SpringBootTest(webEnvironment = RANDOM_PORT)
+@SpringBootTest(webEnvironment = RANDOM_PORT, properties = {"eureka.client.enabled:false"})
 @AutoConfigureMockMvc
 @Testcontainers
-public abstract class AbstractIntegrationTest {
+public abstract class AbstractIntegrationTest extends SharedPostgreSQLContainer{
 
   @Autowired
   protected MockMvc mockMvc;
 
   @Autowired
   protected ObjectMapper objectMapper;
-
-  @Container
-  public static PostgreSQLContainer<SharedPostgreSQLContainer> POSTGRES_SQL_CONTAINER = SharedPostgreSQLContainer
-      .getInstance();
 
 }
