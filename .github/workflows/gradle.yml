@@ -25,13 +25,13 @@ jobs:
       run: chmod +x gradlew
     
     - name: Cache Gradle packages
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-          restore-keys: ${{ runner.os }}-gradle-
+      uses: actions/cache@v2.1.0
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+        restore-keys: ${{ runner.os }}-gradle-
           
     - name: Build with Gradle
-      run: ./gradlew build
+      run: ./gradlew clean build
