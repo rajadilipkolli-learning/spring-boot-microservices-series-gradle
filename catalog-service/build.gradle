@@ -1,15 +1,33 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "com.avast.gradle:gradle-docker-compose-plugin:${docker_compose_plugin_version}"
+        classpath "org.owasp:dependency-check-gradle:${owasp_plugin_version}"
+        classpath "com.google.googlejavaformat:google-java-format:1.10.0"
+    }
+}
 plugins {
-    id 'org.springframework.boot' version '2.5.0'
+    id 'org.springframework.boot' version "${spring_boot_version}"
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-    id 'java'
+    id 'java-library'
+    id 'com.gorylenko.gradle-git-properties' version '2.3.1'
+    id 'com.github.ben-manes.versions' version '0.39.0'
+    id "com.github.spotbugs" version '4.7.1' apply false
+    id "org.sonarqube" version '3.2.0' apply false
+}
+apply plugin: "idea"
+apply plugin: "docker-compose"
+apply from: "gradle/code-quality.gradle"
+if (project.hasProperty("ci")) {
+    apply from: "gradle/owasp.gradle"
 }
 
-apply plugin: 'io.spring.dependency-management'
-apply from: 'cloud.gradle'
-
-group = 'com.example.catalogservice'
+group = 'com.example.catalog'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+sourceCompatibility = 11
+targetCompatibility = 11
 
 configurations {
     compileOnly {
@@ -22,40 +40,101 @@ repositories {
     maven { url 'https://repo.spring.io/milestone' }
 }
 
-ext {
-    set('springCloudVersion', "2020.0.2")
-    set('swaggerVersion', "3.0.0")
-    set('testcontainersVersion', "1.15.3")
-    set('problemSpringWebVersion', "0.26.2")
-}
-
 dependencies {
-    implementation 'com.github.ben-manes.caffeine:caffeine'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.liquibase:liquibase-core'
-    implementation "org.zalando:problem-spring-web-starter:${problemSpringWebVersion}"
-    implementation "io.springfox:springfox-swagger2:${swaggerVersion}"
-    implementation "io.springfox:springfox-swagger-ui:${swaggerVersion}"
-    compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    runtimeOnly 'org.postgresql:postgresql'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    runtimeOnly 'com.h2database:h2'
+    runtimeOnly 'org.postgresql:postgresql'
+    implementation 'org.liquibase:liquibase-core'
+    implementation "io.springfox:springfox-boot-starter:${swagger_version}"
+    implementation "org.zalando:problem-spring-web-starter:${problem_spring_web_version}"
+    implementation "org.apache.commons:commons-lang3:${commons_lang_version}"
+    implementation "commons-io:commons-io:${commons_io_version}"
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.testcontainers:junit-jupiter'
-    testImplementation 'org.testcontainers:postgresql'
+    testImplementation "org.projectlombok:lombok"
+    testImplementation "org.awaitility:awaitility:${awaitility_version}"
+    testImplementation "org.testcontainers:junit-jupiter"
+    testImplementation "org.testcontainers:postgresql"
 }
 
 dependencyManagement {
     imports {
-        mavenBom "org.testcontainers:testcontainers-bom:${testcontainersVersion}"
-        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${spring_cloud_version}"
+        mavenBom "org.testcontainers:testcontainers-bom:${testcontainers_version}"
     }
 }
 
+defaultTasks "bootRun"
+
+springBoot {
+    buildInfo()
+}
+
+bootJar {
+    //launchScript()
+}
+
+bootBuildImage {
+    imageName = "DOCKER_USERNAME/catalog-service"
+}
+
+dockerCompose {
+    useComposeFiles = ["docker/docker-compose.yml"]
+}
+
+compileJava.dependsOn processResources
+processResources.dependsOn bootBuildInfo
+
+if (project.hasProperty("local")) {
+    bootRun {
+        args = ["--spring.profiles.active=local"]
+    }
+    bootRun.dependsOn composeUp
+}
+
+gitProperties {
+    failOnNoGitDirectory = false
+    keys = ["git.branch", "git.commit.id.abbrev", "git.commit.id.describe"]
+}
 
 test {
     useJUnitPlatform()
+    exclude "**/*IT*", "**/*IntegrationTest*", "**/*IntTest*"
+    testLogging {
+        events = ["PASSED", "FAILED", "SKIPPED"]
+        showStandardStreams = true
+        exceptionFormat = "full"
+    }
+}
+
+task integrationTest(type: Test) {
+    useJUnitPlatform()
+
+    include "**/*IT*", "**/*IntegrationTest*", "**/*IntTest*"
+    shouldRunAfter test
+
+    testLogging {
+        events = ["PASSED", "FAILED", "SKIPPED"]
+        showStandardStreams = true
+        exceptionFormat = "full"
+    }
+}
+
+check.dependsOn integrationTest
+
+task testReport(type: TestReport) {
+    destinationDir = file("$buildDir/reports/tests")
+    reportOn test
+}
+
+task integrationTestReport(type: TestReport) {
+    destinationDir = file("$buildDir/reports/tests")
+    reportOn integrationTest
 }

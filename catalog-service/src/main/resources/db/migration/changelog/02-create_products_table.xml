@@ -4,24 +4,19 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
-    <changeSet author="rajakolli" id="createTable-products">
+    <changeSet author="sivalabs" id="createTable-products">
         <createSequence
                         sequenceName="product_id_seq"
-                        incrementBy="1"
+                        incrementBy="100"
                         startValue="1"
                         />
         <createTable tableName="products">
             <column name="id" type="bigint" defaultValueSequenceNext="product_id_seq">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="code" type="varchar(1024)">
+            <column name="text" type="varchar(1024)">
                 <constraints nullable="false"/>
             </column>
-            <column name="name" type="varchar(1024)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="description" type="varchar(1024)"/>
-            <column name="price" type="double" />
         </createTable>
     </changeSet>
 </databaseChangeLog>
