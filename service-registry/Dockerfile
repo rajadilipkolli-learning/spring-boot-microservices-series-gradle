@@ -1,4 +1,4 @@
-FROM fabric8/java-alpine-openjdk8-jre
+FROM openjdk:11-jdk-slim
 VOLUME /tmp
 ADD build/libs/service-registry-0.0.1-SNAPSHOT.jar app.jar
 RUN sh -c 'touch /app.jar'

@@ -1,4 +1,4 @@
-FROM fabric8/java-alpine-openjdk11-jre
+FROM openjdk:11-jdk-slim
 VOLUME /tmp
 ADD build/libs/config-server-0.0.1-SNAPSHOT.jar app.jar
 RUN sh -c 'touch /app.jar'

@@ -14,7 +14,6 @@ plugins {
     id 'com.gorylenko.gradle-git-properties'
     id 'com.github.ben-manes.versions'
     id "com.github.spotbugs" apply false
-    id "org.sonarqube" apply false
 }
 apply plugin: "idea"
 apply plugin: "docker-compose"

@@ -1,3 +1,19 @@
+plugins {
+    id "org.sonarqube"
+}
+
+sonarqube {
+    properties {
+        property "sonar.sourceEncoding", "UTF-8"
+        property "sonar.projectKey", "rajadileepkolli_spring-boot-microservices-series-gradle"
+        property "sonar.organization", "rajadileepkolli"
+        property "sonar.host.url", "https://sonarcloud.io"
+        property "sonar.java.codeCoveragePlugin", "jacoco"
+        property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml"
+        property "sonar.java.checkstyle.reportPaths", "build/reports/checkstyle/main.xml"
+    }
+}
+
 allprojects {
 
     apply plugin: 'idea'
@@ -5,4 +21,8 @@ allprojects {
     apply plugin: 'java'
 
     sourceCompatibility = 11
+}
+
+repositories {
+    mavenCentral()
 }
