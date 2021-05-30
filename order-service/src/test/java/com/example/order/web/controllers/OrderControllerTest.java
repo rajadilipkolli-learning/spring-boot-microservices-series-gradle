@@ -59,7 +59,7 @@ class OrderControllerTest {
         given(orderService.findAllOrders()).willReturn(this.orderList);
 
         this.mockMvc
-                .perform(get(""))
+                .perform(get("/api/orders"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()", is(orderList.size())));
     }
@@ -71,7 +71,7 @@ class OrderControllerTest {
         given(orderService.findOrderById(orderId)).willReturn(Optional.of(order));
 
         this.mockMvc
-                .perform(get("/{id}", orderId))
+                .perform(get("/api/orders/{id}", orderId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.text", is(order.getText())));
     }
@@ -82,7 +82,7 @@ class OrderControllerTest {
         given(orderService.findOrderById(orderId)).willReturn(Optional.empty());
 
         this.mockMvc
-                .perform(get("/{id}", orderId))
+                .perform(get("/api/orders/{id}", orderId))
                 .andExpect(status().isNotFound());
     }
 
@@ -94,7 +94,7 @@ class OrderControllerTest {
         Order order = new Order(1L, "some text");
         this.mockMvc
                 .perform(
-                        post("")
+                        post("/api/orders")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(order)))
                 .andExpect(status().isCreated())
@@ -108,7 +108,7 @@ class OrderControllerTest {
 
         this.mockMvc
                 .perform(
-                        post("")
+                        post("/api/orders")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(order)))
                 .andExpect(status().isBadRequest())
@@ -135,7 +135,7 @@ class OrderControllerTest {
 
         this.mockMvc
                 .perform(
-                        put("/{id}", order.getId())
+                        put("/api/orders/{id}", order.getId())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(order)))
                 .andExpect(status().isOk())
@@ -150,7 +150,7 @@ class OrderControllerTest {
 
         this.mockMvc
                 .perform(
-                        put("/{id}", orderId)
+                        put("/api/orders/{id}", orderId)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(order)))
                 .andExpect(status().isNotFound());
@@ -164,7 +164,7 @@ class OrderControllerTest {
         doNothing().when(orderService).deleteOrderById(order.getId());
 
         this.mockMvc
-                .perform(delete("/{id}", order.getId()))
+                .perform(delete("/api/orders/{id}", order.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.text", is(order.getText())));
     }
@@ -175,7 +175,7 @@ class OrderControllerTest {
         given(orderService.findOrderById(orderId)).willReturn(Optional.empty());
 
         this.mockMvc
-                .perform(delete("/{id}", orderId))
+                .perform(delete("/api/orders/{id}", orderId))
                 .andExpect(status().isNotFound());
     }
 }

@@ -40,7 +40,7 @@ class OrderControllerIT extends AbstractIntegrationTest {
     @Test
     void shouldFetchAllOrders() throws Exception {
         this.mockMvc
-                .perform(get(""))
+                .perform(get("/api/orders"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()", is(orderList.size())));
     }
@@ -51,7 +51,7 @@ class OrderControllerIT extends AbstractIntegrationTest {
         Long orderId = order.getId();
 
         this.mockMvc
-                .perform(get("/{id}", orderId))
+                .perform(get("/api/orders/{id}", orderId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.text", is(order.getText())));
     }
@@ -61,7 +61,7 @@ class OrderControllerIT extends AbstractIntegrationTest {
         Order order = new Order(null, "New Order");
         this.mockMvc
                 .perform(
-                        post("")
+                        post("/api/orders")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(order)))
                 .andExpect(status().isCreated())
@@ -74,7 +74,7 @@ class OrderControllerIT extends AbstractIntegrationTest {
 
         this.mockMvc
                 .perform(
-                        post("")
+                        post("/api/orders")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(order)))
                 .andExpect(status().isBadRequest())
@@ -98,7 +98,7 @@ class OrderControllerIT extends AbstractIntegrationTest {
 
         this.mockMvc
                 .perform(
-                        put("/{id}", order.getId())
+                        put("/api/orders/{id}", order.getId())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(order)))
                 .andExpect(status().isOk())
@@ -110,7 +110,7 @@ class OrderControllerIT extends AbstractIntegrationTest {
         Order order = orderList.get(0);
 
         this.mockMvc
-                .perform(delete("/{id}", order.getId()))
+                .perform(delete("/api/orders/{id}", order.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.text", is(order.getText())));
     }
