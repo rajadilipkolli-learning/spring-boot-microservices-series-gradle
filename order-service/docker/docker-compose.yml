@@ -2,8 +2,7 @@ version: '3.8'
 services:
 
   postgresqldb:
-    image: postgres:latest
-    container_name: postgres-order-service
+    image: postgres:12.3
     environment:
       - POSTGRES_USER=siva
       - POSTGRES_PASSWORD=secret
@@ -11,3 +10,16 @@ services:
     ports:
       - "5432:5432"
 
+  localstack:
+    image: localstack/localstack:0.11.2
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=S3,SQS
+      - DEFAULT_REGION=us-east-1
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - HOST_TMP_FOLDER=${TMPDIR}
+    volumes:
+      - "${TMPDIR:-/private}:/private"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - '../.localstack:/docker-entrypoint-initaws.d'

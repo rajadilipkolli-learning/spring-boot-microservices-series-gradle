@@ -1,34 +1,30 @@
 package com.example.catalogservice.common;
 
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
 
-public class SharedPostgreSQLContainer
-    extends PostgreSQLContainer<SharedPostgreSQLContainer> {
-  private static final String IMAGE_VERSION = "postgres:12.3";
+public class SharedPostgreSQLContainer {
 
-  private static SharedPostgreSQLContainer container;
+  @Container
+  protected static final PostgreSQLContainer<?> POSTGRES_SQL_CONTAINER =
+          new PostgreSQLContainer<>("postgres:latest")
+                  .withDatabaseName("integration-tests-db")
+                  .withUsername("username")
+                  .withPassword("password");
 
-  private SharedPostgreSQLContainer() {
-    super(IMAGE_VERSION);
+  static {
+    POSTGRES_SQL_CONTAINER.start();
   }
 
-  public static SharedPostgreSQLContainer getInstance() {
-    if (container == null) {
-      container = new SharedPostgreSQLContainer();
-    }
-    return container;
-  }
-
-  @Override
-  public void start() {
-    super.start();
-    System.setProperty("spring.datasource.url", container.getJdbcUrl());
-    System.setProperty("spring.datasource.username", container.getUsername());
-    System.setProperty("spring.datasource.password", container.getPassword());
-  }
-
-  @Override
-  public void stop() {
-    //do nothing, JVM handles shut down
+  @DynamicPropertySource
+  static void setPostgreSQLContainer(DynamicPropertyRegistry propertyRegistry) {
+    propertyRegistry.add("spring.datasource.url", POSTGRES_SQL_CONTAINER::getJdbcUrl);
+    propertyRegistry.add("spring.datasource.username", POSTGRES_SQL_CONTAINER::getUsername);
+    propertyRegistry.add("spring.datasource.password", POSTGRES_SQL_CONTAINER::getPassword);
+    propertyRegistry.add("spring.liquibase.url", POSTGRES_SQL_CONTAINER::getJdbcUrl);
+    propertyRegistry.add("spring.liquibase.user", POSTGRES_SQL_CONTAINER::getUsername);
+    propertyRegistry.add("spring.liquibase.password", POSTGRES_SQL_CONTAINER::getPassword);
   }
 }

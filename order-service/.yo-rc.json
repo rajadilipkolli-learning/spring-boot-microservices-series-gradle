@@ -1,12 +1,15 @@
 {
   "generator-springboot": {
     "appName": "order-service",
-    "packageName": "com.example.orderservice",
+    "packageName": "com.example.order",
     "databaseType": "postgresql",
     "dbMigrationTool": "flywaydb",
-    "features": [],
+    "features": [
+      "elk",
+      "localstack"
+    ],
     "buildTool": "gradle",
-    "packageFolder": "com/example/orderservice",
+    "packageFolder": "com/example/order",
     "flywayMigrationCounter": 2
   }
 }
