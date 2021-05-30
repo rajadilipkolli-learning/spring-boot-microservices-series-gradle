@@ -31,9 +31,9 @@ class ProductControllerIT extends AbstractIntegrationTest {
         productRepository.deleteAll();
 
         productList = new ArrayList<>();
-        productList.add(new Product(1L, "First Product"));
-        productList.add(new Product(2L, "Second Product"));
-        productList.add(new Product(3L, "Third Product"));
+        productList.add(new Product(1L, "PR001", "First Product", "Description 1", 50d));
+        productList.add(new Product(2L, "PR002", "Second Product", "Description 2", 150d));
+        productList.add(new Product(3L, "PR003", "Third Product", "Description 3", 250d));
         productList = productRepository.saveAll(productList);
     }
 
@@ -53,24 +53,24 @@ class ProductControllerIT extends AbstractIntegrationTest {
         this.mockMvc
                 .perform(get("/api/products/{id}", productId))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.text", is(product.getText())));
+                .andExpect(jsonPath("$.code", is(product.getCode())));
     }
 
     @Test
     void shouldCreateNewProduct() throws Exception {
-        Product product = new Product(null, "New Product");
+        Product product = new Product(null, "PR004", "New Product", null, 350d);
         this.mockMvc
                 .perform(
                         post("/api/products")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(product)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.text", is(product.getText())));
+                .andExpect(jsonPath("$.code", is(product.getCode())));
     }
 
     @Test
     void shouldReturn400WhenCreateNewProductWithoutText() throws Exception {
-        Product product = new Product(null, null);
+        Product product = new Product(null, null, null, null, 0d);
 
         this.mockMvc
                 .perform(
@@ -85,16 +85,18 @@ class ProductControllerIT extends AbstractIntegrationTest {
                                 is("https://zalando.github.io/problem/constraint-violation")))
                 .andExpect(jsonPath("$.title", is("Constraint Violation")))
                 .andExpect(jsonPath("$.status", is(400)))
-                .andExpect(jsonPath("$.violations", hasSize(1)))
-                .andExpect(jsonPath("$.violations[0].field", is("text")))
-                .andExpect(jsonPath("$.violations[0].message", is("Text cannot be empty")))
+                .andExpect(jsonPath("$.violations", hasSize(2)))
+                .andExpect(jsonPath("$.violations[0].field", is("code")))
+                .andExpect(jsonPath("$.violations[0].message", is("Code cannot be empty")))
+                .andExpect(jsonPath("$.violations[1].field", is("name")))
+                .andExpect(jsonPath("$.violations[1].message", is("Name cannot be empty")))
                 .andReturn();
     }
 
     @Test
     void shouldUpdateProduct() throws Exception {
         Product product = productList.get(0);
-        product.setText("Updated Product");
+        product.setName("Updated Product");
 
         this.mockMvc
                 .perform(
@@ -102,7 +104,7 @@ class ProductControllerIT extends AbstractIntegrationTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(product)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.text", is(product.getText())));
+                .andExpect(jsonPath("$.name", is(product.getName())));
     }
 
     @Test
@@ -112,6 +114,6 @@ class ProductControllerIT extends AbstractIntegrationTest {
         this.mockMvc
                 .perform(delete("/api/products/{id}", product.getId()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.text", is(product.getText())));
+                .andExpect(jsonPath("$.code", is(product.getCode())));
     }
 }

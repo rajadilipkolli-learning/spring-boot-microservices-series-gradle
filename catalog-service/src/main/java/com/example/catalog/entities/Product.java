@@ -30,6 +30,14 @@ public class Product {
     private Long id;
 
     @Column(nullable = false)
-    @NotEmpty(message = "Text cannot be empty")
-    private String text;
+    @NotEmpty(message = "Code cannot be empty")
+    private String code;
+
+    @Column(nullable = false)
+    @NotEmpty(message = "Name cannot be empty")
+    private String name;
+
+    private String description;
+
+    private Double price;
 }
