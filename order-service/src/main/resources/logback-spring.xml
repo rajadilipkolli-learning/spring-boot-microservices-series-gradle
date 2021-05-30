@@ -16,6 +16,8 @@
         </root>
     </springProfile>
 
-    <logger name="com.example.orderservice" level="DEBUG"/>
+    <logger name="com.example.order" level="DEBUG"/>
+    <logger name="com.amazonaws.util.EC2MetadataUtils" level="ERROR"/>
+    <logger name="com.amazonaws.internal.InstanceMetadataServiceResourceFetcher" level="ERROR"/>
 
 </configuration>
