@@ -1,2 +1,2 @@
 rootProject.name = 'spring-boot-microservices-gradle'
-include 'config-server', 'service-registry', 'catalog-service', 'order-service'
+include 'config-server', 'service-registry', 'order-service', 'catalog-service'

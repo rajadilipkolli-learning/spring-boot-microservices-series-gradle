@@ -1,7 +1,7 @@
-package com.example.order.web.controllers;
+package com.example.catalog.web.controllers;
 
-import com.example.order.entities.Order;
-import com.example.order.services.OrderService;
+import com.example.catalog.entities.Product;
+import com.example.catalog.services.ProductService;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,56 +19,57 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/orders")
+@RequestMapping("/api/products")
 @Slf4j
-public class OrderController {
+public class ProductController {
 
-    private final OrderService orderService;
+    private final ProductService productService;
 
     @Autowired
-    public OrderController(OrderService orderService) {
-        this.orderService = orderService;
+    public ProductController(ProductService productService) {
+        this.productService = productService;
     }
 
     @GetMapping
-    public List<Order> getAllOrders() {
-        return orderService.findAllOrders();
+    public List<Product> getAllProducts() {
+        return productService.findAllProducts();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Order> getOrderById(@PathVariable Long id) {
-        return orderService
-                .findOrderById(id)
+    public ResponseEntity<Product> getProductById(@PathVariable Long id) {
+        return productService
+                .findProductById(id)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Order createOrder(@RequestBody @Validated Order order) {
-        return orderService.saveOrder(order);
+    public Product createProduct(@RequestBody @Validated Product product) {
+        return productService.saveProduct(product);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Order> updateOrder(@PathVariable Long id, @RequestBody Order order) {
-        return orderService
-                .findOrderById(id)
+    public ResponseEntity<Product> updateProduct(
+            @PathVariable Long id, @RequestBody Product product) {
+        return productService
+                .findProductById(id)
                 .map(
-                        orderObj -> {
-                            order.setId(id);
-                            return ResponseEntity.ok(orderService.saveOrder(order));
+                        productObj -> {
+                            product.setId(id);
+                            return ResponseEntity.ok(productService.saveProduct(product));
                         })
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Order> deleteOrder(@PathVariable Long id) {
-        return orderService
-                .findOrderById(id)
+    public ResponseEntity<Product> deleteProduct(@PathVariable Long id) {
+        return productService
+                .findProductById(id)
                 .map(
-                        order -> {
-                            orderService.deleteOrderById(id);
-                            return ResponseEntity.ok(order);
+                        product -> {
+                            productService.deleteProductById(id);
+                            return ResponseEntity.ok(product);
                         })
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }

@@ -1,4 +1,4 @@
-package com.example.order.entities;
+package com.example.catalog.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,18 +14,18 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "orders")
+@Table(name = "products")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Order {
+public class Product {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_id_generator")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_id_generator")
     @SequenceGenerator(
-            name = "order_id_generator",
-            sequenceName = "order_id_seq",
+            name = "product_id_generator",
+            sequenceName = "product_id_seq",
             allocationSize = 100)
     private Long id;
 

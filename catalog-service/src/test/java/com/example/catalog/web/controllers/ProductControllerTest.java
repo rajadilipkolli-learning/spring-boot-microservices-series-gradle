@@ -1,4 +1,4 @@
-package com.example.order.web.controllers;
+package com.example.catalog.web.controllers;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -14,8 +14,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.example.order.entities.Order;
-import com.example.order.services.OrderService;
+import com.example.catalog.entities.Product;
+import com.example.catalog.services.ProductService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,84 +31,84 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.zalando.problem.ProblemModule;
 import org.zalando.problem.violations.ConstraintViolationProblemModule;
 
-@WebMvcTest(controllers = OrderController.class)
+@WebMvcTest(controllers = ProductController.class)
 @ActiveProfiles("test")
-class OrderControllerTest {
+class ProductControllerTest {
 
     @Autowired private MockMvc mockMvc;
 
-    @MockBean private OrderService orderService;
+    @MockBean private ProductService productService;
 
     @Autowired private ObjectMapper objectMapper;
 
-    private List<Order> orderList;
+    private List<Product> productList;
 
     @BeforeEach
     void setUp() {
-        this.orderList = new ArrayList<>();
-        this.orderList.add(new Order(1L, "text 1"));
-        this.orderList.add(new Order(2L, "text 2"));
-        this.orderList.add(new Order(3L, "text 3"));
+        this.productList = new ArrayList<>();
+        this.productList.add(new Product(1L, "text 1"));
+        this.productList.add(new Product(2L, "text 2"));
+        this.productList.add(new Product(3L, "text 3"));
 
         objectMapper.registerModule(new ProblemModule());
         objectMapper.registerModule(new ConstraintViolationProblemModule());
     }
 
     @Test
-    void shouldFetchAllOrders() throws Exception {
-        given(orderService.findAllOrders()).willReturn(this.orderList);
+    void shouldFetchAllProducts() throws Exception {
+        given(productService.findAllProducts()).willReturn(this.productList);
 
         this.mockMvc
-                .perform(get("/api/orders"))
+                .perform(get("/api/products"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()", is(orderList.size())));
+                .andExpect(jsonPath("$.size()", is(productList.size())));
     }
 
     @Test
-    void shouldFindOrderById() throws Exception {
-        Long orderId = 1L;
-        Order order = new Order(orderId, "text 1");
-        given(orderService.findOrderById(orderId)).willReturn(Optional.of(order));
+    void shouldFindProductById() throws Exception {
+        Long productId = 1L;
+        Product product = new Product(productId, "text 1");
+        given(productService.findProductById(productId)).willReturn(Optional.of(product));
 
         this.mockMvc
-                .perform(get("/api/orders/{id}", orderId))
+                .perform(get("/api/products/{id}", productId))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.text", is(order.getText())));
+                .andExpect(jsonPath("$.text", is(product.getText())));
     }
 
     @Test
-    void shouldReturn404WhenFetchingNonExistingOrder() throws Exception {
-        Long orderId = 1L;
-        given(orderService.findOrderById(orderId)).willReturn(Optional.empty());
+    void shouldReturn404WhenFetchingNonExistingProduct() throws Exception {
+        Long productId = 1L;
+        given(productService.findProductById(productId)).willReturn(Optional.empty());
 
-        this.mockMvc.perform(get("/api/orders/{id}", orderId)).andExpect(status().isNotFound());
+        this.mockMvc.perform(get("/api/products/{id}", productId)).andExpect(status().isNotFound());
     }
 
     @Test
-    void shouldCreateNewOrder() throws Exception {
-        given(orderService.saveOrder(any(Order.class)))
+    void shouldCreateNewProduct() throws Exception {
+        given(productService.saveProduct(any(Product.class)))
                 .willAnswer((invocation) -> invocation.getArgument(0));
 
-        Order order = new Order(1L, "some text");
+        Product product = new Product(1L, "some text");
         this.mockMvc
                 .perform(
-                        post("/api/orders")
+                        post("/api/products")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(order)))
+                                .content(objectMapper.writeValueAsString(product)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id", notNullValue()))
-                .andExpect(jsonPath("$.text", is(order.getText())));
+                .andExpect(jsonPath("$.text", is(product.getText())));
     }
 
     @Test
-    void shouldReturn400WhenCreateNewOrderWithoutText() throws Exception {
-        Order order = new Order(null, null);
+    void shouldReturn400WhenCreateNewProductWithoutText() throws Exception {
+        Product product = new Product(null, null);
 
         this.mockMvc
                 .perform(
-                        post("/api/orders")
+                        post("/api/products")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(order)))
+                                .content(objectMapper.writeValueAsString(product)))
                 .andExpect(status().isBadRequest())
                 .andExpect(header().string("Content-Type", is("application/problem+json")))
                 .andExpect(
@@ -124,54 +124,56 @@ class OrderControllerTest {
     }
 
     @Test
-    void shouldUpdateOrder() throws Exception {
-        Long orderId = 1L;
-        Order order = new Order(orderId, "Updated text");
-        given(orderService.findOrderById(orderId)).willReturn(Optional.of(order));
-        given(orderService.saveOrder(any(Order.class)))
+    void shouldUpdateProduct() throws Exception {
+        Long productId = 1L;
+        Product product = new Product(productId, "Updated text");
+        given(productService.findProductById(productId)).willReturn(Optional.of(product));
+        given(productService.saveProduct(any(Product.class)))
                 .willAnswer((invocation) -> invocation.getArgument(0));
 
         this.mockMvc
                 .perform(
-                        put("/api/orders/{id}", order.getId())
+                        put("/api/products/{id}", product.getId())
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(order)))
+                                .content(objectMapper.writeValueAsString(product)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.text", is(order.getText())));
+                .andExpect(jsonPath("$.text", is(product.getText())));
     }
 
     @Test
-    void shouldReturn404WhenUpdatingNonExistingOrder() throws Exception {
-        Long orderId = 1L;
-        given(orderService.findOrderById(orderId)).willReturn(Optional.empty());
-        Order order = new Order(orderId, "Updated text");
+    void shouldReturn404WhenUpdatingNonExistingProduct() throws Exception {
+        Long productId = 1L;
+        given(productService.findProductById(productId)).willReturn(Optional.empty());
+        Product product = new Product(productId, "Updated text");
 
         this.mockMvc
                 .perform(
-                        put("/api/orders/{id}", orderId)
+                        put("/api/products/{id}", productId)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(order)))
+                                .content(objectMapper.writeValueAsString(product)))
                 .andExpect(status().isNotFound());
     }
 
     @Test
-    void shouldDeleteOrder() throws Exception {
-        Long orderId = 1L;
-        Order order = new Order(orderId, "Some text");
-        given(orderService.findOrderById(orderId)).willReturn(Optional.of(order));
-        doNothing().when(orderService).deleteOrderById(order.getId());
+    void shouldDeleteProduct() throws Exception {
+        Long productId = 1L;
+        Product product = new Product(productId, "Some text");
+        given(productService.findProductById(productId)).willReturn(Optional.of(product));
+        doNothing().when(productService).deleteProductById(product.getId());
 
         this.mockMvc
-                .perform(delete("/api/orders/{id}", order.getId()))
+                .perform(delete("/api/products/{id}", product.getId()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.text", is(order.getText())));
+                .andExpect(jsonPath("$.text", is(product.getText())));
     }
 
     @Test
-    void shouldReturn404WhenDeletingNonExistingOrder() throws Exception {
-        Long orderId = 1L;
-        given(orderService.findOrderById(orderId)).willReturn(Optional.empty());
+    void shouldReturn404WhenDeletingNonExistingProduct() throws Exception {
+        Long productId = 1L;
+        given(productService.findProductById(productId)).willReturn(Optional.empty());
 
-        this.mockMvc.perform(delete("/api/orders/{id}", orderId)).andExpect(status().isNotFound());
+        this.mockMvc
+                .perform(delete("/api/products/{id}", productId))
+                .andExpect(status().isNotFound());
     }
 }

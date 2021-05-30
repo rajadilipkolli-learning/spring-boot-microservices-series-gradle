@@ -28,9 +28,9 @@ scrape_configs:
   static_configs:
   - targets: ['localhost:9090']
 
-- job_name: 'catalogservice'
+- job_name: 'catalog-service'
 
   metrics_path: '/actuator/prometheus'
   scrape_interval: 5s
   static_configs:
-  - targets: ['catalogservice:8080']
+  - targets: ['catalog-service:8080']
