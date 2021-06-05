@@ -1,12 +1,11 @@
 version: 2
 updates:
-- package-ecosystem: gradle
+- package-ecosystem: maven
   directory: "/"
   schedule:
     interval: daily
   open-pull-requests-limit: 10
-  ignore:
-  - dependency-name: org.springframework.boot
-    versions:
-    - 2.4.3
-    - 2.4.4
+- package-ecosystem: "github-actions"
+  directory: "/"
+  schedule:
+    interval: "daily"
