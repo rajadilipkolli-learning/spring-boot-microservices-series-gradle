@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class Initializer implements CommandLineRunner {
 
-    private final ApplicationProperties properties;
+    private final ApplicationProperties applicationProperties;
 
     @Override
     public void run(String... args) {
