@@ -50,7 +50,7 @@ dependencies {
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'org.postgresql:postgresql'
     implementation 'org.liquibase:liquibase-core'
-    implementation 'org.springdoc:springdoc-openapi-ui:1.6.3'
+    implementation 'org.springdoc:springdoc-openapi-ui:1.6.4'
     implementation "org.zalando:problem-spring-web-starter:${problem_spring_web_version}"
     implementation "org.apache.commons:commons-lang3:${commons_lang_version}"
     implementation "commons-io:commons-io:${commons_io_version}"
