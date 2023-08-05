@@ -13,3 +13,8 @@ vscode:
     - Pivotal.vscode-spring-boot
     - vscjava.vscode-spring-initializr
     - vscjava.vscode-java-test
+
+ports:
+  - port: 8761
+    visibility: public
+    onOpen: open-browser

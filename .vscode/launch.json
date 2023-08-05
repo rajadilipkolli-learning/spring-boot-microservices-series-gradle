@@ -1,0 +1,44 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-ConfigServerApplication<config-server>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.example.configserver.ConfigServerApplication",
+            "projectName": "config-server",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-ServiceRegistryApplication<service-registry>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.example.serviceregistry.ServiceRegistryApplication",
+            "projectName": "service-registry",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-Application<catalog-service>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.example.catalog.Application",
+            "projectName": "catalog-service",
+            "args": "--spring.profiles.active=local",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-Application<order-service>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.example.order.Application",
+            "projectName": "order-service",
+            "args": "--spring.profiles.active=local",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
