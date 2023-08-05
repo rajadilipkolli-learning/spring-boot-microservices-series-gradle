@@ -1,7 +1,6 @@
 apply plugin: 'checkstyle'
 apply plugin: 'pmd'
 apply plugin: 'jacoco'
-// apply plugin: "com.github.spotbugs"
 apply plugin: "org.sonarqube"
 
 checkstyle {
@@ -17,13 +16,6 @@ pmd {
     ruleSets = []
     ruleSetFiles = files("build-config/pmd/pmd-ruleset.xml")
     sourceSets = [sourceSets.main]
-}
-
-tasks.matching {task -> task.name.startsWith('spotbugs')}.forEach {
-    it.reports {
-        html.required = true
-        xml.required = false
-    }
 }
 
 jacoco {
@@ -57,7 +49,6 @@ jacocoTestReport {
 }
 
 jacocoTestCoverageVerification {
-    dependsOn ":catalog-service:integrationTest"
     executionData fileTree(project.buildDir.absolutePath).include("jacoco/*.exec")
     afterEvaluate {
         getClassDirectories().setFrom(files(classDirectories.files.collect {

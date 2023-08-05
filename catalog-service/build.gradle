@@ -14,7 +14,7 @@ plugins {
     id 'com.gorylenko.gradle-git-properties'
     id 'com.github.ben-manes.versions'
     id "com.diffplug.spotless"
-    id "com.github.spotbugs" apply false
+    id "org.sonarqube"
 }
 
 apply plugin: "idea"
@@ -141,13 +141,15 @@ task integrationTest(type: Test) {
 }
 
 check.dependsOn integrationTest
+check.dependsOn jacocoTestReport
+jacocoTestCoverageVerification.dependsOn integrationTest
 
-task testReport(type: TestReport) {
-    destinationDir = file("$buildDir/reports/tests")
-    reportOn test
+tasks.register('testReport', TestReport) {
+    destinationDirectory = file("$buildDir/reports/tests")
+    testResults.from(test)
 }
 
-task integrationTestReport(type: TestReport) {
-    destinationDir = file("$buildDir/reports/tests")
-    reportOn integrationTest
+tasks.register('integrationTestReport', TestReport) {
+    destinationDirectory = file("$buildDir/reports/tests")
+    testResults.from(integrationTest)
 }
