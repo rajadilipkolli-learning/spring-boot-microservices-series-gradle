@@ -16,7 +16,9 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				"vscjava.vscode-java-pack"
+				"vscjava.vscode-java-pack",
+				"vscjava.vscode-gradle",
+				"github.vscode-github-actions"
 			]
 		}
 	}
