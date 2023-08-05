@@ -3,15 +3,24 @@
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
-    <changeSet author="sivalabs" id="createTable-products">
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet author="appUser" id="createTable-products">
+
+        <preConditions>
+            <not>
+                <sequenceExists sequenceName="products_seq"/>
+                <tableExists tableName="products"/>
+            </not>
+        </preConditions>
         <createSequence
-                        sequenceName="product_id_seq"
-                        incrementBy="100"
+                        sequenceName="products_seq"
+                        incrementBy="50"
                         startValue="1"
                         />
+
         <createTable tableName="products">
-            <column name="id" type="bigint" defaultValueSequenceNext="product_id_seq">
+            <column name="id" type="bigint" defaultValueSequenceNext="products_seq">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="code" type="varchar(1024)">
