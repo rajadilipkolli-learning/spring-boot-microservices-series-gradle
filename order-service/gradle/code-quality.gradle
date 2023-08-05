@@ -51,12 +51,13 @@ jacocoTestReport {
     }
 
     reports {
-        xml.enabled = true
-        html.enabled = true
+        xml.required = true
+        html.required = true
     }
 }
 
 jacocoTestCoverageVerification {
+    dependsOn ":order-service:integrationTest"
     executionData fileTree(project.buildDir.absolutePath).include("jacoco/*.exec")
     afterEvaluate {
         getClassDirectories().setFrom(files(classDirectories.files.collect {
@@ -67,7 +68,7 @@ jacocoTestCoverageVerification {
         rule {
             element = 'BUNDLE'
             limit {
-                counter = 'COMPLEXITY'
+                counter = 'LINE'
                 value = 'COVEREDRATIO'
                 minimum = new BigDecimal("${jacoco_min_coverage_required}")
             }

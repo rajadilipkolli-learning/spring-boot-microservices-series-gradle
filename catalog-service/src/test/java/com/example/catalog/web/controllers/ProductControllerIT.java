@@ -22,7 +22,8 @@ import org.springframework.http.MediaType;
 
 class ProductControllerIT extends AbstractIntegrationTest {
 
-    @Autowired private ProductRepository productRepository;
+    @Autowired
+    private ProductRepository productRepository;
 
     private List<Product> productList = null;
 
@@ -60,10 +61,9 @@ class ProductControllerIT extends AbstractIntegrationTest {
     void shouldCreateNewProduct() throws Exception {
         Product product = new Product(null, "PR004", "New Product", null, 350d);
         this.mockMvc
-                .perform(
-                        post("/api/products")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(product)))
+                .perform(post("/api/products")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(product)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.code", is(product.getCode())));
     }
@@ -73,16 +73,12 @@ class ProductControllerIT extends AbstractIntegrationTest {
         Product product = new Product(null, null, null, null, 0d);
 
         this.mockMvc
-                .perform(
-                        post("/api/products")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(product)))
+                .perform(post("/api/products")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(product)))
                 .andExpect(status().isBadRequest())
                 .andExpect(header().string("Content-Type", is("application/problem+json")))
-                .andExpect(
-                        jsonPath(
-                                "$.type",
-                                is("about:blank")))
+                .andExpect(jsonPath("$.type", is("about:blank")))
                 .andExpect(jsonPath("$.title", is("Constraint Violation")))
                 .andExpect(jsonPath("$.status", is(400)))
                 .andExpect(jsonPath("$.violations", hasSize(2)))
@@ -99,10 +95,9 @@ class ProductControllerIT extends AbstractIntegrationTest {
         product.setName("Updated Product");
 
         this.mockMvc
-                .perform(
-                        put("/api/products/{id}", product.getId())
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(product)))
+                .perform(put("/api/products/{id}", product.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(product)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", is(product.getName())));
     }
