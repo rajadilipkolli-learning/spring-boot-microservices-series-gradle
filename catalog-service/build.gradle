@@ -13,8 +13,10 @@ plugins {
     id 'java-library'
     id 'com.gorylenko.gradle-git-properties'
     id 'com.github.ben-manes.versions'
+    id "com.diffplug.spotless"
     id "com.github.spotbugs" apply false
 }
+
 apply plugin: "idea"
 apply plugin: "docker-compose"
 apply from: "gradle/code-quality.gradle"
@@ -96,8 +98,24 @@ if (project.hasProperty("local")) {
 
 gitProperties {
     failOnNoGitDirectory = false
-    keys = ["git.branch", "git.commit.id.abbrev", "git.commit.id.describe"]
+    keys = [
+            "git.branch",
+            "git.commit.id.abbrev",
+            "git.commit.user.name",
+            "git.commit.message.full"
+    ]
 }
+
+spotless {
+    java {
+        importOrder()
+        removeUnusedImports()
+        palantirJavaFormat("2.30.0")
+        formatAnnotations()
+    }
+}
+
+check.dependsOn spotlessCheck
 
 test {
     useJUnitPlatform()
