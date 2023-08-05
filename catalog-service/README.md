@@ -8,8 +8,8 @@
 `$ ./gradlew bootRun -Plocal`
 
 ### Useful Links
-* Swagger UI: http://localhost:8080/swagger-ui/index.html
-* Actuator Endpoint: http://localhost:8080/actuator
+* Swagger UI: http://localhost:18080/catalog-service/swagger-ui.html
+* Actuator Endpoint: http://localhost:18080/catalog-service/actuator
 * Prometheus: http://localhost:9090/
 * Grafana: http://localhost:3000/ (admin/admin)
 * Kibana: http://localhost:5601/
