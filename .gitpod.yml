@@ -1,0 +1,8 @@
+# Learn more from ready-to-use templates: https://www.gitpod.io/docs/introduction/getting-started/quickstart
+image: gitpod/workspace-java-17
+tasks:
+  - init: ./gradlew build
+
+vscode:
+  extensions:
+    - vscjava.vscode-java-pack

@@ -28,8 +28,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import org.zalando.problem.jackson.ProblemModule;
-import org.zalando.problem.violations.ConstraintViolationProblemModule;
 
 @WebMvcTest(controllers = OrderController.class)
 @ActiveProfiles("test")
@@ -49,9 +47,6 @@ class OrderControllerTest {
         this.orderList.add(new Order(1L, "text 1"));
         this.orderList.add(new Order(2L, "text 2"));
         this.orderList.add(new Order(3L, "text 3"));
-
-        objectMapper.registerModule(new ProblemModule());
-        objectMapper.registerModule(new ConstraintViolationProblemModule());
     }
 
     @Test
@@ -114,7 +109,7 @@ class OrderControllerTest {
                 .andExpect(
                         jsonPath(
                                 "$.type",
-                                is("https://zalando.github.io/problem/constraint-violation")))
+                                is("about:blank")))
                 .andExpect(jsonPath("$.title", is("Constraint Violation")))
                 .andExpect(jsonPath("$.status", is(400)))
                 .andExpect(jsonPath("$.violations", hasSize(1)))

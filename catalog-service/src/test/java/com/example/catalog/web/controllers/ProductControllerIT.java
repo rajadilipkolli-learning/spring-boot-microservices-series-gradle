@@ -82,7 +82,7 @@ class ProductControllerIT extends AbstractIntegrationTest {
                 .andExpect(
                         jsonPath(
                                 "$.type",
-                                is("https://zalando.github.io/problem/constraint-violation")))
+                                is("about:blank")))
                 .andExpect(jsonPath("$.title", is("Constraint Violation")))
                 .andExpect(jsonPath("$.status", is(400)))
                 .andExpect(jsonPath("$.violations", hasSize(2)))
