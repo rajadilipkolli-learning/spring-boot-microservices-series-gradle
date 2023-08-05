@@ -7,14 +7,12 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.testcontainers.containers.PostgreSQLContainer;
 
 @Slf4j
-public class DBContainerInitializer
-        implements ApplicationContextInitializer<ConfigurableApplicationContext> {
+public class DBContainerInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
-    private static final PostgreSQLContainer<?> sqlContainer =
-            new PostgreSQLContainer<>("postgres:latest")
-                    .withDatabaseName("integration-tests-db")
-                    .withUsername("username")
-                    .withPassword("password");
+    private static final PostgreSQLContainer<?> sqlContainer = new PostgreSQLContainer<>("postgres:latest")
+            .withDatabaseName("integration-tests-db")
+            .withUsername("username")
+            .withPassword("password");
 
     static {
         sqlContainer.start();

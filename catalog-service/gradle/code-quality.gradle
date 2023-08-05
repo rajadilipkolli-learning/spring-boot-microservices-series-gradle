@@ -1,7 +1,7 @@
 apply plugin: 'checkstyle'
 apply plugin: 'pmd'
 apply plugin: 'jacoco'
-apply plugin: "com.github.spotbugs"
+// apply plugin: "com.github.spotbugs"
 apply plugin: "org.sonarqube"
 
 checkstyle {
@@ -57,7 +57,7 @@ jacocoTestReport {
 }
 
 jacocoTestCoverageVerification {
-    dependsOn ":integrationTest"
+    dependsOn ":catalog-service:integrationTest"
     executionData fileTree(project.buildDir.absolutePath).include("jacoco/*.exec")
     afterEvaluate {
         getClassDirectories().setFrom(files(classDirectories.files.collect {

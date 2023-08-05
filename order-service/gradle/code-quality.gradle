@@ -57,7 +57,7 @@ jacocoTestReport {
 }
 
 jacocoTestCoverageVerification {
-    dependsOn ":integrationTest"
+    dependsOn ":order-service:integrationTest"
     executionData fileTree(project.buildDir.absolutePath).include("jacoco/*.exec")
     afterEvaluate {
         getClassDirectories().setFrom(files(classDirectories.files.collect {

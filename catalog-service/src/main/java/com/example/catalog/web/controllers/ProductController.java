@@ -3,7 +3,6 @@ package com.example.catalog.web.controllers;
 import com.example.catalog.entities.Product;
 import com.example.catalog.services.ProductService;
 import java.util.List;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -34,10 +33,8 @@ public class ProductController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Product> getProductById(@PathVariable Long id) {
-        return productService
-                .findProductById(id)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        return productService.findProductById(id).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound()
+                .build());
     }
 
     @PostMapping
@@ -47,15 +44,13 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> updateProduct(
-            @PathVariable Long id, @RequestBody Product product) {
+    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product product) {
         return productService
                 .findProductById(id)
-                .map(
-                        productObj -> {
-                            product.setId(id);
-                            return ResponseEntity.ok(productService.saveProduct(product));
-                        })
+                .map(productObj -> {
+                    product.setId(id);
+                    return ResponseEntity.ok(productService.saveProduct(product));
+                })
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
@@ -63,11 +58,10 @@ public class ProductController {
     public ResponseEntity<Product> deleteProduct(@PathVariable Long id) {
         return productService
                 .findProductById(id)
-                .map(
-                        product -> {
-                            productService.deleteProductById(id);
-                            return ResponseEntity.ok(product);
-                        })
+                .map(product -> {
+                    productService.deleteProductById(id);
+                    return ResponseEntity.ok(product);
+                })
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }
