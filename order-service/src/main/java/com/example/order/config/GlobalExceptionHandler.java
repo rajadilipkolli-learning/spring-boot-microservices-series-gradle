@@ -1,6 +1,7 @@
 package com.example.order.config;
 
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -34,6 +35,7 @@ public class GlobalExceptionHandler {
                                             fieldError.getRejectedValue(),
                                             Objects.requireNonNull(fieldError.getDefaultMessage()));
                                 })
+                        .sorted(Comparator.comparing(ApiValidationError::field))
                         .toList();
         problemDetail.setProperty("violations", validationErrorsList);
         return problemDetail;

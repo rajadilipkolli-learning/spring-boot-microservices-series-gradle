@@ -1,3 +1,4 @@
+---
 # Learn more from ready-to-use templates: https://www.gitpod.io/docs/introduction/getting-started/quickstart
 image: gitpod/workspace-java-17
 tasks:
@@ -6,3 +7,5 @@ tasks:
 vscode:
   extensions:
     - vscjava.vscode-java-pack
+    - redhat.java
+    - Pivotal.vscode-boot-dev-pack
