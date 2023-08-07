@@ -1,5 +1,14 @@
+apply plugin: 'pmd'
 apply plugin: 'jacoco'
 apply plugin: "org.sonarqube"
+
+pmd {
+    toolVersion = "${pmd_plugin_version}"
+    consoleOutput = true
+    ruleSets = []
+    ruleSetFiles = files("build-config/pmd/pmd-ruleset.xml")
+    sourceSets = [sourceSets.main]
+}
 
 jacoco {
     toolVersion = "${jacoco_plugin_version}"
