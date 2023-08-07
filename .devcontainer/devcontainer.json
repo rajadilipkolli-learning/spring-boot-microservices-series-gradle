@@ -18,7 +18,8 @@
 			"extensions": [
 				"vscjava.vscode-java-pack",
 				"vscjava.vscode-gradle",
-				"github.vscode-github-actions"
+				"github.vscode-github-actions",
+				"ms-azuretools.vscode-docker"
 			]
 		}
 	}
