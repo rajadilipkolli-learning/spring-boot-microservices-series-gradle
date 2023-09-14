@@ -13,8 +13,12 @@ vscode:
     - Pivotal.vscode-spring-boot
     - vscjava.vscode-spring-initializr
     - vscjava.vscode-java-test
+    - redhat.java
 
 ports:
   - port: 8761
+    visibility: public
+    onOpen: open-browser
+  - port: 5050
     visibility: public
     onOpen: open-browser
