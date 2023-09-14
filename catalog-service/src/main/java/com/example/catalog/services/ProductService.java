@@ -2,11 +2,9 @@ package com.example.catalog.services;
 
 import com.example.catalog.entities.Product;
 import com.example.catalog.repositories.ProductRepository;
-
-import lombok.RequiredArgsConstructor;
-
 import java.util.List;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
