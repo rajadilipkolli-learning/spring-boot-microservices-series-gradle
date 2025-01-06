@@ -10,7 +10,7 @@ rootProject {
         rewrite("org.openrewrite.recipe:rewrite-spring:5.25.0")
     }
     rewrite {
-        activeRecipe("org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_2")
+        activeRecipe("org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_3")
         setExportDatatables(true)
     }
     afterEvaluate {
