@@ -97,7 +97,7 @@ class ProductControllerTest {
     }
 
     @Test
-    void shouldReturn400WhenCreateNewProductWithoutText() throws Exception {
+    void shouldReturn400WhenCreateNewProductWithoutCodeAndName() throws Exception {
         Product product = new Product(null, null, null, null, 0d);
 
         this.mockMvc
