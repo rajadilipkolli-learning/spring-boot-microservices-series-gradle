@@ -26,8 +26,8 @@ if (project.hasProperty("ci")) {
 
 group = 'com.example.catalog'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = 17
-targetCompatibility = 17
+sourceCompatibility = 21
+targetCompatibility = 21
 
 configurations {
     compileOnly {
@@ -113,7 +113,7 @@ spotless {
     java {
         importOrder()
         removeUnusedImports()
-        palantirJavaFormat("2.30.0")
+        palantirJavaFormat("2.50.0")
         formatAnnotations()
     }
 }

@@ -15,7 +15,7 @@ public class TestApplication {
     @ServiceConnection
     @RestartScope
     PostgreSQLContainer<?> postgreSQLContainer() {
-        return new PostgreSQLContainer<>(DockerImageName.parse("postgres:15.3-alpine"));
+        return new PostgreSQLContainer<>(DockerImageName.parse("postgres:17.2-alpine"));
     }
 
     public static void main(String[] args) {
