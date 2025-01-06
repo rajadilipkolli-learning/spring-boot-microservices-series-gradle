@@ -48,7 +48,7 @@ class ProductControllerIT extends AbstractIntegrationTest {
 
     @Test
     void shouldFindProductById() throws Exception {
-        Product product = productList.get(0);
+        Product product = productList.getFirst();
         Long productId = product.getId();
 
         this.mockMvc
@@ -91,7 +91,7 @@ class ProductControllerIT extends AbstractIntegrationTest {
 
     @Test
     void shouldUpdateProduct() throws Exception {
-        Product product = productList.get(0);
+        Product product = productList.getFirst();
         product.setName("Updated Product");
 
         this.mockMvc
@@ -104,7 +104,7 @@ class ProductControllerIT extends AbstractIntegrationTest {
 
     @Test
     void shouldDeleteProduct() throws Exception {
-        Product product = productList.get(0);
+        Product product = productList.getFirst();
 
         this.mockMvc
                 .perform(delete("/api/products/{id}", product.getId()))
