@@ -25,12 +25,10 @@ public class Product {
     private Long id;
 
     @Column(nullable = false)
-    @NotEmpty(message = "Code cannot be empty")
-    private String code;
+    @NotEmpty(message = "Code cannot be empty") private String code;
 
     @Column(nullable = false)
-    @NotEmpty(message = "Name cannot be empty")
-    private String name;
+    @NotEmpty(message = "Name cannot be empty") private String name;
 
     private String description;
 
