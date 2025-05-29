@@ -31,9 +31,9 @@ class OrderControllerIT extends AbstractIntegrationTest {
         orderRepository.deleteAll();
 
         orderList = new ArrayList<>();
-        orderList.add(new Order(1L, "First Order"));
-        orderList.add(new Order(2L, "Second Order"));
-        orderList.add(new Order(3L, "Third Order"));
+        orderList.add(new Order(null, "First Order"));
+        orderList.add(new Order(null, "Second Order"));
+        orderList.add(new Order(null, "Third Order"));
         orderList = orderRepository.saveAll(orderList);
     }
 
