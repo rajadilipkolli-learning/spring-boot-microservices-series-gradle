@@ -32,9 +32,9 @@ class ProductControllerIT extends AbstractIntegrationTest {
         productRepository.deleteAll();
 
         productList = new ArrayList<>();
-        productList.add(new Product(1L, "PR001", "First Product", "Description 1", 50d));
-        productList.add(new Product(2L, "PR002", "Second Product", "Description 2", 150d));
-        productList.add(new Product(3L, "PR003", "Third Product", "Description 3", 250d));
+        productList.add(new Product(null, "PR001", "First Product", "Description 1", 50d));
+        productList.add(new Product(null, "PR002", "Second Product", "Description 2", 150d));
+        productList.add(new Product(null, "PR003", "Third Product", "Description 3", 250d));
         productList = productRepository.saveAll(productList);
     }
 
