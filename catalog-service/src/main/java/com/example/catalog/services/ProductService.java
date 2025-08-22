@@ -7,6 +7,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 @Service
 @Transactional
@@ -24,6 +25,7 @@ public class ProductService {
     }
 
     public Product saveProduct(Product product) {
+        Assert.notNull(product, "Product cannot be null");
         return productRepository.save(product);
     }
 
