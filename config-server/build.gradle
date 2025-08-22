@@ -6,7 +6,12 @@ plugins {
 
 group = 'com.example.configserver'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '21'
+
+java {
+  toolchain {
+    languageVersion = JavaLanguageVersion.of(21)
+  }
+}
 
 repositories {
     mavenCentral()
