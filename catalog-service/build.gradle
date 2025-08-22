@@ -26,8 +26,12 @@ if (project.hasProperty("ci")) {
 
 group = 'com.example.catalog'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = 21
-targetCompatibility = 21
+
+java {
+  toolchain {
+    languageVersion = JavaLanguageVersion.of(21)
+  }
+}
 
 configurations {
     compileOnly {
