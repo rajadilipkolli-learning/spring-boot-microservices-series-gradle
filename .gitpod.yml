@@ -1,6 +1,6 @@
 ---
 # Learn more from ready-to-use templates: https://www.gitpod.io/docs/introduction/getting-started/quickstart
-image: gitpod/workspace-java-17
+image: gitpod/workspace-java-21
 tasks:
   - init: ./gradlew build
 
