@@ -20,7 +20,11 @@ allprojects {
     apply plugin: 'eclipse'
     apply plugin: 'java'
 
-    sourceCompatibility = 21
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(25)
+        }
+    }
 }
 
 repositories {

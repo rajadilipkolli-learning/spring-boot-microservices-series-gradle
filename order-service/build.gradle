@@ -24,8 +24,13 @@ if (project.hasProperty("ci")) {
 
 group = 'com.example.order'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = 21
-targetCompatibility = 21
+
+java {
+  toolchain {
+    languageVersion = JavaLanguageVersion.of(25)
+  }
+}
+
 
 configurations {
     compileOnly {
@@ -35,7 +40,9 @@ configurations {
 
 repositories {
     mavenCentral()
-    maven { url 'https://repo.spring.io/milestone' }
+    maven { 
+        url = uri('https://repo.spring.io/milestone')
+    }
 }
 
 dependencies {
