@@ -29,7 +29,7 @@ version = '0.0.1-SNAPSHOT'
 
 java {
   toolchain {
-    languageVersion = JavaLanguageVersion.of(21)
+    languageVersion = JavaLanguageVersion.of(25)
   }
 }
 
@@ -41,7 +41,9 @@ configurations {
 
 repositories {
     mavenCentral()
-    maven { url 'https://repo.spring.io/milestone' }
+    maven { 
+        url = uri('https://repo.spring.io/milestone')
+    }
 }
 
 dependencies {
@@ -57,7 +59,7 @@ dependencies {
     runtimeOnly 'org.postgresql:postgresql'
     runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
     implementation 'org.liquibase:liquibase-core'
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.13'
     implementation "commons-io:commons-io:${commons_io_version}"
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -116,7 +118,7 @@ spotless {
     java {
         importOrder()
         removeUnusedImports()
-        palantirJavaFormat("2.50.0")
+        palantirJavaFormat("2.74.0")
         formatAnnotations()
     }
 }
