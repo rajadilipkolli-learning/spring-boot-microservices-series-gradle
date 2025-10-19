@@ -31,7 +31,6 @@ java {
   }
 }
 
-
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
@@ -118,10 +117,18 @@ test {
     }
 }
 
-task integrationTest(type: Test) {
+tasks.register('integrationTest', Test) {
     useJUnitPlatform()
 
-    include "**/*IT*", "**/*IntegrationTest*", "**/*IntTest*"
+    // Use compiled test classes (we keep IT tests under src/test/java) so the
+    // task can discover and run them. Ensure test classes are compiled first.
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
+    dependsOn testClasses
+
+    // Match compiled test class files. This is more explicit and reliable
+    // across Gradle versions.
+    include "**/*IT.class", "**/*IntegrationTest.class", "**/*IntTest.class"
     shouldRunAfter test
 
     testLogging {

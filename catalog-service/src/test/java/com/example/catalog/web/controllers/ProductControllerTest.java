@@ -33,6 +33,26 @@ import org.springframework.test.web.servlet.MockMvc;
 @ActiveProfiles("test")
 class ProductControllerTest {
 
+    private static final String API_PRODUCTS = "/api/products";
+    private static final String API_PRODUCTS_ID = "/api/products/{id}";
+    private static final String CONTENT_TYPE = "Content-Type";
+    private static final String APPLICATION_PROBLEM_JSON = "application/problem+json";
+    private static final String VIOLATIONS_PATH = "$.violations";
+    private static final String VIOLATIONS_FIELD = "$.violations[0].field";
+    private static final String VIOLATIONS_MESSAGE = "$.violations[0].message";
+    private static final String CODE_FIELD = "code";
+    private static final String NAME_FIELD = "name";
+    private static final String CODE_EMPTY_MESSAGE = "Code cannot be empty";
+    private static final String NAME_EMPTY_MESSAGE = "Name cannot be empty";
+    private static final String CODE_PATH = "$.code";
+    private static final String NAME_PATH = "$.name";
+    private static final String PRODUCT_CODE_1 = "P001";
+    private static final String PRODUCT_NAME_1 = "Product 1";
+    private static final String PRODUCT_CODE_2 = "P002";
+    private static final String PRODUCT_NAME_2 = "Product 2";
+    private static final String PRODUCT_CODE_3 = "P003";
+    private static final String PRODUCT_NAME_3 = "Product 3";
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -47,9 +67,9 @@ class ProductControllerTest {
     @BeforeEach
     void setUp() {
         this.productList = new ArrayList<>();
-        this.productList.add(new Product(1L, "P001", "Product 1", null, 30d));
-        this.productList.add(new Product(2L, "P002", "Product 2", null, 40d));
-        this.productList.add(new Product(3L, "P003", "Product 3", null, 50d));
+        this.productList.add(new Product(1L, PRODUCT_CODE_1, PRODUCT_NAME_1, null, 30d));
+        this.productList.add(new Product(2L, PRODUCT_CODE_2, PRODUCT_NAME_2, null, 40d));
+        this.productList.add(new Product(3L, PRODUCT_CODE_3, PRODUCT_NAME_3, null, 50d));
     }
 
     @Test
@@ -57,7 +77,7 @@ class ProductControllerTest {
         given(productService.findAllProducts()).willReturn(this.productList);
 
         this.mockMvc
-                .perform(get("/api/products"))
+                .perform(get(API_PRODUCTS))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()", is(productList.size())));
     }
@@ -65,13 +85,13 @@ class ProductControllerTest {
     @Test
     void shouldFindProductById() throws Exception {
         Long productId = 1L;
-        Product product = new Product(productId, "P001", "Product 1", null, 30d);
+        Product product = new Product(productId, PRODUCT_CODE_1, PRODUCT_NAME_1, null, 30d);
         given(productService.findProductById(productId)).willReturn(Optional.of(product));
 
         this.mockMvc
-                .perform(get("/api/products/{id}", productId))
+                .perform(get(API_PRODUCTS_ID, productId))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code", is(product.getCode())));
+                .andExpect(jsonPath(CODE_PATH, is(product.getCode())));
     }
 
     @Test
@@ -79,21 +99,21 @@ class ProductControllerTest {
         Long productId = 1L;
         given(productService.findProductById(productId)).willReturn(Optional.empty());
 
-        this.mockMvc.perform(get("/api/products/{id}", productId)).andExpect(status().isNotFound());
+        this.mockMvc.perform(get(API_PRODUCTS_ID, productId)).andExpect(status().isNotFound());
     }
 
     @Test
     void shouldCreateNewProduct() throws Exception {
-        given(productService.saveProduct(any(Product.class))).willAnswer((invocation) -> invocation.getArgument(0));
+        given(productService.saveProduct(any(Product.class))).willAnswer(invocation -> invocation.getArgument(0));
 
-        Product product = new Product(1L, "P001", "Product 1", null, 30d);
+        Product product = new Product(1L, PRODUCT_CODE_1, PRODUCT_NAME_1, null, 30d);
         this.mockMvc
-                .perform(post("/api/products")
+                .perform(post(API_PRODUCTS)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(product)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id", notNullValue()))
-                .andExpect(jsonPath("$.code", is(product.getCode())));
+                .andExpect(jsonPath(CODE_PATH, is(product.getCode())));
     }
 
     @Test
@@ -101,62 +121,106 @@ class ProductControllerTest {
         Product product = new Product(null, null, null, null, 0d);
 
         this.mockMvc
-                .perform(post("/api/products")
+                .perform(post(API_PRODUCTS)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(product)))
                 .andExpect(status().isBadRequest())
-                .andExpect(header().string("Content-Type", is("application/problem+json")))
+                .andExpect(header().string(CONTENT_TYPE, is(APPLICATION_PROBLEM_JSON)))
                 .andExpect(jsonPath("$.type", is("about:blank")))
                 .andExpect(jsonPath("$.title", is("Constraint Violation")))
                 .andExpect(jsonPath("$.status", is(400)))
-                .andExpect(jsonPath("$.violations", hasSize(2)))
-                .andExpect(jsonPath("$.violations[0].field", is("code")))
-                .andExpect(jsonPath("$.violations[0].message", is("Code cannot be empty")))
-                .andExpect(jsonPath("$.violations[1].field", is("name")))
-                .andExpect(jsonPath("$.violations[1].message", is("Name cannot be empty")))
-                .andReturn();
+                .andExpect(jsonPath(VIOLATIONS_PATH, hasSize(2)))
+                .andExpect(jsonPath(VIOLATIONS_FIELD, is(CODE_FIELD)))
+                .andExpect(jsonPath(VIOLATIONS_MESSAGE, is(CODE_EMPTY_MESSAGE)))
+                .andExpect(jsonPath("$.violations[1].field", is(NAME_FIELD)))
+                .andExpect(jsonPath("$.violations[1].message", is(NAME_EMPTY_MESSAGE)));
+    }
+
+    @Test
+    void shouldReturn400WhenCreateNewProductWithEmptyCode() throws Exception {
+        Product product = new Product(null, "", "Product Name", null, 30d);
+
+        this.mockMvc
+                .perform(post(API_PRODUCTS)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(product)))
+                .andExpect(status().isBadRequest())
+                .andExpect(header().string(CONTENT_TYPE, is(APPLICATION_PROBLEM_JSON)))
+                .andExpect(jsonPath(VIOLATIONS_PATH, hasSize(1)))
+                .andExpect(jsonPath(VIOLATIONS_FIELD, is(CODE_FIELD)))
+                .andExpect(jsonPath(VIOLATIONS_MESSAGE, is(CODE_EMPTY_MESSAGE)));
+    }
+
+    @Test
+    void shouldReturn400WhenCreateNewProductWithEmptyName() throws Exception {
+        Product product = new Product(null, PRODUCT_CODE_1, "", null, 30d);
+
+        this.mockMvc
+                .perform(post(API_PRODUCTS)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(product)))
+                .andExpect(status().isBadRequest())
+                .andExpect(header().string(CONTENT_TYPE, is(APPLICATION_PROBLEM_JSON)))
+                .andExpect(jsonPath(VIOLATIONS_PATH, hasSize(1)))
+                .andExpect(jsonPath(VIOLATIONS_FIELD, is(NAME_FIELD)))
+                .andExpect(jsonPath(VIOLATIONS_MESSAGE, is(NAME_EMPTY_MESSAGE)));
     }
 
     @Test
     void shouldUpdateProduct() throws Exception {
         Long productId = 1L;
-        Product product = new Product(1L, "P001", "Updated Product", null, 30d);
+        Product product = new Product(productId, PRODUCT_CODE_1, "Updated Product", null, 30d);
         given(productService.findProductById(productId)).willReturn(Optional.of(product));
-        given(productService.saveProduct(any(Product.class))).willAnswer((invocation) -> invocation.getArgument(0));
+        given(productService.saveProduct(any(Product.class))).willAnswer(invocation -> invocation.getArgument(0));
 
         this.mockMvc
-                .perform(put("/api/products/{id}", product.getId())
+                .perform(put(API_PRODUCTS_ID, product.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(product)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code", is(product.getCode())))
-                .andExpect(jsonPath("$.name", is(product.getName())));
+                .andExpect(jsonPath(CODE_PATH, is(product.getCode())))
+                .andExpect(jsonPath(NAME_PATH, is(product.getName())));
     }
 
     @Test
     void shouldReturn404WhenUpdatingNonExistingProduct() throws Exception {
         Long productId = 1L;
         given(productService.findProductById(productId)).willReturn(Optional.empty());
-        Product product = new Product(1L, "P001", "Updated Product", null, 30d);
+        Product product = new Product(productId, PRODUCT_CODE_1, "Updated Product", null, 30d);
 
         this.mockMvc
-                .perform(put("/api/products/{id}", productId)
+                .perform(put(API_PRODUCTS_ID, productId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(product)))
                 .andExpect(status().isNotFound());
     }
 
     @Test
+    void shouldReturn400WhenUpdateProductWithInvalidData() throws Exception {
+        Long productId = 1L;
+        Product product = new Product(productId, "", "", null, 30d);
+        given(productService.findProductById(productId)).willReturn(Optional.of(product));
+
+        this.mockMvc
+                .perform(put(API_PRODUCTS_ID, productId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(product)))
+                .andExpect(status().isBadRequest())
+                .andExpect(header().string(CONTENT_TYPE, is(APPLICATION_PROBLEM_JSON)))
+                .andExpect(jsonPath(VIOLATIONS_PATH, hasSize(2)));
+    }
+
+    @Test
     void shouldDeleteProduct() throws Exception {
         Long productId = 1L;
-        Product product = new Product(productId, "P001", "Product 1", null, 30d);
+        Product product = new Product(productId, PRODUCT_CODE_1, PRODUCT_NAME_1, null, 30d);
         given(productService.findProductById(productId)).willReturn(Optional.of(product));
         doNothing().when(productService).deleteProductById(product.getId());
 
         this.mockMvc
-                .perform(delete("/api/products/{id}", product.getId()))
+                .perform(delete(API_PRODUCTS_ID, product.getId()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code", is(product.getCode())));
+                .andExpect(jsonPath(CODE_PATH, is(product.getCode())));
     }
 
     @Test
@@ -164,6 +228,6 @@ class ProductControllerTest {
         Long productId = 1L;
         given(productService.findProductById(productId)).willReturn(Optional.empty());
 
-        this.mockMvc.perform(delete("/api/products/{id}", productId)).andExpect(status().isNotFound());
+        this.mockMvc.perform(delete(API_PRODUCTS_ID, productId)).andExpect(status().isNotFound());
     }
 }

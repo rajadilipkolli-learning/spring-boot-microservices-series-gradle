@@ -3,7 +3,7 @@
 {
 	"name": "Java",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "mcr.microsoft.com/devcontainers/java:1-21-bullseye",
+	"image": "mcr.microsoft.com/devcontainers/java:25",
 
 	"features": {
 		"ghcr.io/devcontainers/features/java:1": {
@@ -11,7 +11,9 @@
 			"installMaven": "false",
 			"installGradle": "true"
 		},
-		"ghcr.io/devcontainers/features/docker-in-docker:2": {}
+		"ghcr.io/devcontainers/features/docker-in-docker:2": {
+			"moby": false
+		}
 	},
 	"customizations": {
 		"vscode": {
@@ -22,13 +24,13 @@
 				"ms-azuretools.vscode-docker"
 			]
 		}
-	}
+	},
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "java -version",
+	"postCreateCommand": "./gradlew compileJava"
 
 	// Configure tool-specific properties.
 	// "customizations": {},
