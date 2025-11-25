@@ -82,7 +82,7 @@ class OrderControllerIT extends AbstractIntegrationTest {
                 .andExpect(
                         jsonPath(
                                 "$.type",
-                                is("about:blank")))
+                                is("https://api.microservices.com/errors/validation-error")))
                 .andExpect(jsonPath("$.title", is("Constraint Violation")))
                 .andExpect(jsonPath("$.status", is(400)))
                 .andExpect(jsonPath("$.violations", hasSize(1)))
