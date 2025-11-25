@@ -10,7 +10,7 @@ rootProject {
         rewrite("org.openrewrite.recipe:rewrite-spring:6.19.0")
     }
     rewrite {
-        activeRecipe("org.openrewrite.java.spring.boot3.SpringBoot3BestPractices")
+        activeRecipe("org.openrewrite.java.spring.boot4.UpgradeSpringBoot_4_0")
         setExportDatatables(true)
     }
     afterEvaluate {
