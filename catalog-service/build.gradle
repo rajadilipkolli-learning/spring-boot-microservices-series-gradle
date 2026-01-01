@@ -59,7 +59,7 @@ dependencies {
     runtimeOnly 'org.postgresql:postgresql'
     runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
     implementation 'org.springframework.boot:spring-boot-starter-liquibase'
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.0'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.1'
     implementation "commons-io:commons-io:${commons_io_version}"
 
     testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
