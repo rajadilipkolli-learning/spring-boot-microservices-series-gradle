@@ -7,7 +7,7 @@ initscript {
 rootProject {
     plugins.apply(org.openrewrite.gradle.RewritePlugin)
     dependencies {
-        rewrite("org.openrewrite.recipe:rewrite-spring:6.23.1")
+        rewrite("org.openrewrite.recipe:rewrite-spring:6.24.0")
     }
     rewrite {
         activeRecipe("org.openrewrite.java.spring.boot4.UpgradeSpringBoot_4_0")
